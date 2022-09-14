@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<!-- Linking ANGULAR JS, Fontawesome, Bootstrap & JQuery Libraries -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<head>
+	<title>My Sample App </title>
+</head>	
+<body>
+<div ng-app="angularJSApp" ng-controller="myController">
+    <h2>
+        <i class="fa fa-paper-plane"></i> <!-- Using fontawesome library for using icons -->
+        My Sample App
+    </h2> 
+    <hr/>
+    <div> 
+        <div>Click on the buttons to increase counter or test API Service</div><br/>
+        <button class="btn btn-primary" ng-click="updateCounter()">Update Counter</button>
+        Counter: {{counter}}
+        <br/><br/>
+        <button class="btn btn-primary" ng-click="mockApi()">Test API Service</button>
+        {{message}}
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+<style>
+body {
+  font-family: fangsong;
+  color: #3c4146;
+  padding: 0 5%;
+}
+</style>
+
+<script>
+
+
+    var app = angular.module("angularJSApp", []); 
+    
+    app.controller("myController", function($scope, ApiServices) {
+        $scope.counter = 0;
+        
+        $scope.updateCounter = function() {
+            $scope.counter++;
+        }
+        
+        // ############### Below function use ApiServices for calling backend APIs ###############
+        // ############### Remove if not required ###############
+    
+        // $scope.message = '';
+        // $scope.error = '';
+        
+        $scope.mockApi = function() {
+            $scope.message = 'Testing...'; 
+            ApiServices.mockApi().then(function(res){ 
+                $scope.message = res.data; 
+                $scope.$apply()
+            });
+        }
+        
+        // $scope.getItems = function(item) {
+        //     ApiServices.getData(item)
+        //         .then(function(){ $scope.message = 'Items Fetched'; $scope.listItems = res.data;},
+        //     function(){ $scope.error = 'ERROR: Get API failed';} )
+        // }
+        // $scope.getItems();
+    
+        // $scope.addItem = function(item) {
+        //     !!item && ApiServices.addItem(item)
+        //         .then(function(){ $scope.message = 'Item added'; },
+        //     function(){ $scope.error = 'ERROR: Add API failed';} )
+        // }
+    
+        // $scope.updateItem = function(item) {
+        //     !!item && ApiServices.updateItem(item)
+        //         .then(function(){ $scope.message = 'Item deleted'},
+        //     function(){ $scope.error = 'ERROR: Add API failed';} )
+        // }
+    
+        // $scope.deleteItem = function(item) {
+        //     !!item && ApiServices.removeItem(item).then(
+        //         function(){ $scope.message = 'Item deleted'; },
+        //         function(){ $scope.error = 'ERROR: Delete API failed';} 
+        //     );
+        // }
+    
+    });
+    
+    // ############### Use below ApiServices for integrating backend APIs ###############
+    // ############### Remove if not required ###############
+    
+    app.service('ApiServices', function($http) {
+        const apiServer = 'localhost:3000/';
+        return {
+            mockApi : function() { // For mocked API for testing asynchronous actions
+                return myPromise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve({data: "API Service is working"});
+                    }, 1000);
+                })
+            }
+            // getData : function(){
+            //   return $http.get(apiServer + '/api/list');
+            // },
+            // removeItem: function(item){
+            //   return $http.delete(apiServer + '/api/remove/' + item.id)
+            // },
+            // addItem : function(item){
+            //   return $http({
+            //     url: apiServer + '/api/add', 
+            //     method: 'POST',
+            //     data: { ...item }
+            //   });
+            // },
+            // updateItem : function(item){
+            //   return $http({
+            //     url: apiServer + '/api/update/' + item.id, 
+            //     method: 'PUT',
+            //     data: { ...item }
+            //   });
+            // }
+        }
+    });
+    angular.module('app.services',[]);
+    
+    
+    </script>
